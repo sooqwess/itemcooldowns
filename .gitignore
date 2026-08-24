@@ -5,3 +5,6 @@ icon-preview.html
 .idea/
 *.iml
 .DS_Store
+
+__pycache__/
+*.pyc
