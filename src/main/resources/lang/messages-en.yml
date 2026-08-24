@@ -1,0 +1,15 @@
+prefix: "&8[&bItemCooldowns&8] &r"
+items:
+  mace: "&bMace"
+  spear: "&bSpear"
+  trident: "&bTrident"
+  end-crystal: "&bEnd Crystal"
+  respawn-anchor: "&bRespawn Anchor"
+cooldown:
+  blocked: "&c{item} is recharging! &e{seconds} &csec left."
+  started: "&7{item}: recharging &e{seconds} &7sec."
+commands:
+  help: "&7Commands: &b/itemcooldowns reload &7- reload config"
+  reloaded: "&aConfiguration reloaded."
+  no-permission: "&cYou don't have permission."
+  unknown: "&cUnknown command. &b/itemcooldowns help"

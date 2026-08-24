@@ -1,0 +1,40 @@
+name: ItemCooldowns
+version: '${project.version}'
+main: com.sooqwess.itemcooldowns.ItemCooldowns
+api-version: '1.21'
+author: Sooqwess
+description: PvP cooldowns for mace, spear, trident, end crystals and respawn anchors. Works on Paper, Spigot, Bukkit, Purpur, Pufferfish, Folia and other Bukkit forks, Minecraft 1.21 - 26.x.
+softdepend: [LuckPerms]
+commands:
+  itemcooldowns:
+    description: ItemCooldowns main command
+    aliases: [icd]
+    usage: /itemcooldowns <help|reload>
+permissions:
+  itemcooldowns.bypass:
+    description: Bypass all item cooldowns
+    default: false
+    children:
+      itemcooldowns.bypass.mace: true
+      itemcooldowns.bypass.spear: true
+      itemcooldowns.bypass.trident: true
+      itemcooldowns.bypass.end-crystal: true
+      itemcooldowns.bypass.respawn-anchor: true
+  itemcooldowns.bypass.mace:
+    description: Bypass mace cooldown
+    default: false
+  itemcooldowns.bypass.spear:
+    description: Bypass spear cooldown
+    default: false
+  itemcooldowns.bypass.trident:
+    description: Bypass trident cooldown
+    default: false
+  itemcooldowns.bypass.end-crystal:
+    description: Bypass end crystal cooldown
+    default: false
+  itemcooldowns.bypass.respawn-anchor:
+    description: Bypass respawn anchor cooldown
+    default: false
+  itemcooldowns.admin:
+    description: Allows reloading the plugin config
+    default: op

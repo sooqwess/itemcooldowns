@@ -1,0 +1,7 @@
+target/
+release/
+icon-*.png
+icon-preview.html
+.idea/
+*.iml
+.DS_Store

@@ -1,0 +1,15 @@
+prefix: "&8[&bItemCooldowns&8] &r"
+items:
+  mace: "&bБулава"
+  spear: "&bКопьё"
+  trident: "&bТрезубец"
+  end-crystal: "&bКристалл Энда"
+  respawn-anchor: "&bЯкорь возрождения"
+cooldown:
+  blocked: "&c{item} перезаряжается! Осталось &e{seconds} &cсек."
+  started: "&7{item}: перезарядка &e{seconds} &7сек."
+commands:
+  help: "&7Команды: &b/itemcooldowns reload &7- перезагрузить конфиг"
+  reloaded: "&aКонфигурация перезагружена."
+  no-permission: "&cУ вас недостаточно прав."
+  unknown: "&cНеизвестная команда. &b/itemcooldowns help"

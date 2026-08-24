@@ -1,0 +1,48 @@
+locale: en
+
+pvp-only: true
+
+worlds:
+  enabled: false
+  list:
+    - world
+    - world_pvp
+
+messages:
+  enabled: true
+  notify-start: false
+
+mace:
+  enabled: true
+  cooldown-seconds: 45
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.mace
+
+spear:
+  enabled: true
+  cooldown-seconds: 5
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.spear
+
+trident:
+  enabled: true
+  cooldown-seconds: 5
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.trident
+
+end-crystal:
+  enabled: true
+  cooldown-seconds: 45
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.end-crystal
+
+respawn-anchor:
+  enabled: true
+  cooldown-seconds: 45
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.respawn-anchor
