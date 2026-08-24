@@ -21,7 +21,8 @@ CHANGELOG = (
     "- Fully configurable config.yml: durations, cancel-action, overlay, messages, pvp-only, world whitelist\n"
     "- Localization: `locale: en` by default, English and Russian bundled, custom languages supported\n"
     "- Works on Paper, Spigot, Bukkit, Purpur, Pufferfish, Leaves and other Bukkit forks\n"
-    "- Minecraft 1.21 – 26.x, Folia compatible"
+    "- Minecraft 1.21 – 26.x, Folia compatible\n"
+    "- Added `website` field in plugin.yml pointing to the Modrinth page"
 )
 
 
