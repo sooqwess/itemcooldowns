@@ -20,9 +20,6 @@ public final class CooldownTracker {
         if (entry == null) {
             return 0L;
         }
-        if (entry.tick == player.getWorld().getFullTime()) {
-            return 0L;
-        }
         long remaining = entry.expiry - System.currentTimeMillis();
         if (remaining <= 0L) {
             map.remove(material);
@@ -37,10 +34,14 @@ public final class CooldownTracker {
     public void start(Player player, Material material, int seconds, boolean overlay) {
         long now = System.currentTimeMillis();
         cooldowns.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>())
-                .put(material, new Entry(now + seconds * 1000L, player.getWorld().getFullTime()));
+                .put(material, new Entry(now + seconds * 1000L));
         if (overlay) {
             player.setCooldown(material, seconds * 20);
         }
+    }
+
+    public void clear(Player player) {
+        cooldowns.remove(player.getUniqueId());
     }
 
     public void clear() {
@@ -50,11 +51,8 @@ public final class CooldownTracker {
     private static final class Entry {
 
         private final long expiry;
-        private final long tick;
-
-        private Entry(long expiry, long tick) {
+        private Entry(long expiry) {
             this.expiry = expiry;
-            this.tick = tick;
         }
     }
 }

@@ -11,6 +11,7 @@ public final class ItemCooldowns extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        ensureConfigDefaults();
         this.config = new Config(this);
         this.lang = new Lang(this, config.getLocale());
         this.tracker = new CooldownTracker();
@@ -40,9 +41,17 @@ public final class ItemCooldowns extends JavaPlugin {
 
     public void reload() {
         reloadConfig();
+        ensureConfigDefaults();
         this.config = new Config(this);
         this.lang = new Lang(this, config.getLocale());
         this.tracker.clear();
+    }
+
+    /** Adds new configuration keys when an existing installation is updated. */
+    private void ensureConfigDefaults() {
+        getConfig().addDefault("creative-to-survival-on-player-hit", false);
+        getConfig().options().copyDefaults(true);
+        saveConfig();
     }
 
     public Config getConfigManager() {

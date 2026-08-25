@@ -8,7 +8,7 @@ Plugin that adds cooldowns to PvP items: **mace, spear, trident, end crystals an
 
 - **Mace** — 45 second cooldown between attacks
 - **Spear** (1.21.11+, all 7 variants) — 5 second cooldown between lunges (Jab/Charge) and attacks
-- **Trident** — 5 second cooldown between throws, Riptide dashes and attacks
+- **Trident** — 5 second cooldown between throws and attacks (a throw starts its cooldown only after the projectile is launched)
 - **End Crystal** — 45 second cooldown per use
 - **Respawn Anchor** — 45 second cooldown per use
 - **Ender pearl style visual cooldown**: the inventory slot is covered by a translucent white square that shrinks over time — works on every item of that type in the inventory
@@ -65,6 +65,7 @@ Example:
 locale: en            # message language: en, ru or your own
 
 pvp-only: true        # attack cooldowns only against players
+creative-to-survival-on-player-hit: false # switch a Creative attacker to Survival after a PvP hit
 
 worlds:
   enabled: false      # enable world whitelist
@@ -85,6 +86,8 @@ mace:
 ```
 
 Identical sections exist for `spear`, `trident`, `end-crystal`, `respawn-anchor`.
+
+`creative-to-survival-on-player-hit` is disabled by default. Set it to `true` only if Creative-mode attackers must be moved to Survival after a hit on another player.
 
 ## Localization
 

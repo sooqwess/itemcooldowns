@@ -2,6 +2,9 @@ locale: en
 
 pvp-only: true
 
+# When enabled, a Creative-mode attacker is switched to Survival after hitting a player.
+creative-to-survival-on-player-hit: false
+
 worlds:
   enabled: false
   list:

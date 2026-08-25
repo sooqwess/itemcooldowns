@@ -16,6 +16,7 @@ public final class Config {
 
     private final String locale;
     private final boolean pvpOnly;
+    private final boolean creativeToSurvivalOnPlayerHit;
     private final boolean worldsEnabled;
     private final List<String> worlds;
     private final boolean messagesEnabled;
@@ -27,6 +28,7 @@ public final class Config {
         FileConfiguration c = plugin.getConfig();
         this.locale = c.getString("locale", "en");
         this.pvpOnly = c.getBoolean("pvp-only", true);
+        this.creativeToSurvivalOnPlayerHit = c.getBoolean("creative-to-survival-on-player-hit", false);
         this.worldsEnabled = c.getBoolean("worlds.enabled", false);
         this.worlds = c.getStringList("worlds.list");
         this.messagesEnabled = c.getBoolean("messages.enabled", true);
@@ -66,6 +68,10 @@ public final class Config {
 
     public boolean isPvpOnly() {
         return pvpOnly;
+    }
+
+    public boolean isCreativeToSurvivalOnPlayerHit() {
+        return creativeToSurvivalOnPlayerHit;
     }
 
     public boolean isMessagesEnabled() {

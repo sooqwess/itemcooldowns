@@ -1,7 +1,9 @@
 package com.sooqwess.itemcooldowns;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Trident;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -9,7 +11,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.lang.reflect.Method;
 
@@ -35,7 +40,7 @@ public final class CooldownListener implements Listener {
         this.setUseItemInHand = setUse;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player player)) {
             return;
@@ -47,21 +52,46 @@ public final class CooldownListener implements Listener {
         if (config.isPvpOnly() && !(event.getEntity() instanceof Player)) {
             return;
         }
+        if (config.isCreativeToSurvivalOnPlayerHit() && event.getEntity() instanceof Player
+                && player.getGameMode() == GameMode.CREATIVE) {
+            player.setGameMode(GameMode.SURVIVAL);
+        }
+        // Vanilla melee attacks always use the main hand. Checking the off hand here
+        // would incorrectly block a fist/sword hit just because a cooldown item is held there.
         Material mainHand = player.getInventory().getItemInMainHand().getType();
         Config.ItemRule rule = config.ruleFor(mainHand);
         if (rule != null && rule.getKind().isAttackGated()) {
             handle(player, mainHand, rule, event);
-            return;
         }
-        Material offHand = player.getInventory().getItemInOffHand().getType();
-        rule = config.ruleFor(offHand);
-        if (rule == null || !rule.getKind().isAttackGated()) {
-            return;
-        }
-        handle(player, offHand, rule, event);
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        // Do not retain a player's cooldown or make it survive reconnecting.
+        plugin.getTracker().clear(event.getPlayer());
+    }
+
+    /** Starts the trident cooldown when a throw actually succeeds, not while it is being charged. */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onTridentLaunch(ProjectileLaunchEvent event) {
+        if (!(event.getEntity() instanceof Trident trident)) {
+            return;
+        }
+        ProjectileSource source = trident.getShooter();
+        if (!(source instanceof Player player)) {
+            return;
+        }
+        Config config = plugin.getConfigManager();
+        if (!config.isWorldAllowed(player.getWorld())) {
+            return;
+        }
+        Config.ItemRule rule = config.ruleFor(Material.TRIDENT);
+        if (rule != null) {
+            handle(player, Material.TRIDENT, rule, event);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
         if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
@@ -73,6 +103,11 @@ public final class CooldownListener implements Listener {
         Material material = event.getItem().getType();
         Config.ItemRule rule = plugin.getConfigManager().ruleFor(material);
         if (rule == null || !rule.getKind().isUseGated()) {
+            return;
+        }
+        // A trident must only start cooldown after ProjectileLaunchEvent. Starting it here
+        // cancels the throw itself and lets same-tick attacks bypass the tracker.
+        if (material == Material.TRIDENT) {
             return;
         }
         if (action == Action.RIGHT_CLICK_AIR && rule.getKind() == Kind.BLOCK_USE) {
@@ -100,10 +135,7 @@ public final class CooldownListener implements Listener {
     }
 
     private void handle(Player player, Material material, Config.ItemRule rule, Cancellable event) {
-        if (!rule.isActive()) {
-            return;
-        }
-        if (player.hasPermission(rule.getBypassPermission())) {
+        if (!rule.isActive() || player.hasPermission(rule.getBypassPermission())) {
             return;
         }
         long remaining = plugin.getTracker().remaining(player, material);
