@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.lang.reflect.Method;
@@ -69,6 +70,20 @@ public final class CooldownListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         // Do not retain a player's cooldown or make it survive reconnecting.
         plugin.getTracker().clear(event.getPlayer());
+    }
+
+    /** Handles Riptide separately because it does not create a trident projectile. */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerRiptide(PlayerRiptideEvent event) {
+        Player player = event.getPlayer();
+        Config config = plugin.getConfigManager();
+        if (!config.isWorldAllowed(player.getWorld())) {
+            return;
+        }
+        Config.ItemRule rule = config.ruleFor(Material.TRIDENT);
+        if (rule != null) {
+            handle(player, Material.TRIDENT, rule, event);
+        }
     }
 
     /** Starts the trident cooldown when a throw actually succeeds, not while it is being charged. */
@@ -138,7 +153,7 @@ public final class CooldownListener implements Listener {
         if (!rule.isActive() || player.hasPermission(rule.getBypassPermission())) {
             return;
         }
-        long remaining = plugin.getTracker().remaining(player, material);
+        long remaining = plugin.getTracker().startIfReady(player, material, rule.getSeconds(), rule.isOverlay());
         if (remaining > 0L) {
             if (rule.isCancel()) {
                 cancel(player, material, event);
@@ -146,7 +161,6 @@ public final class CooldownListener implements Listener {
             plugin.getLang().sendBlocked(player, rule, remaining);
             return;
         }
-        plugin.getTracker().start(player, material, rule.getSeconds(), rule.isOverlay());
         plugin.getLang().sendStarted(player, rule, rule.getSeconds());
     }
 
