@@ -2,10 +2,11 @@ name: ItemCooldowns
 version: '${project.version}'
 main: com.sooqwess.itemcooldowns.ItemCooldowns
 api-version: '1.21'
+folia-supported: true
 author: Sooqwess
 description: PvP cooldowns for mace, spear, trident, end crystals and respawn anchors. Works on Paper, Spigot, Bukkit, Purpur, Pufferfish, Folia and other Bukkit forks, Minecraft 1.21 - 26.x.
 website: https://modrinth.com/plugin/item_cooldowns/
-softdepend: [LuckPerms]
+softdepend: [LuckPerms, PvPManager]
 commands:
   itemcooldowns:
     description: ItemCooldowns main command

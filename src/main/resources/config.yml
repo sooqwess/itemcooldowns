@@ -2,7 +2,7 @@ locale: en
 
 pvp-only: true
 
-# When enabled, a Creative-mode attacker is switched to Survival after hitting a player.
+# Switch a Creative-mode attacker to Survival after hitting a player
 creative-to-survival-on-player-hit: false
 
 worlds:
@@ -14,6 +14,12 @@ worlds:
 messages:
   enabled: true
   notify-start: false
+
+pvpmanager:
+  # Integration with PvPManager (SpigotMC #25420, incl. ChanceSD fork v4):
+  # if PvPManager blocks the attack (newbie/respawn protection, PvP mode off, etc.),
+  # no cooldown is applied and the gamemode switch is not triggered
+  enabled: true
 
 mace:
   enabled: true
@@ -27,6 +33,11 @@ spear:
   cooldown-seconds: 5
   cancel-action: true
   overlay: true
+  # Use policy for the right-click action (lunge/throw):
+  # block     - the lunge is fully blocked during the cooldown
+  # damage    - the lunge works, all spear damage is blocked during the cooldown
+  # no-damage - the lunge always works as movement but deals no damage; attacks still have the cooldown
+  use-mode: "damage"
   bypass-permission: itemcooldowns.bypass.spear
 
 trident:
@@ -34,6 +45,11 @@ trident:
   cooldown-seconds: 5
   cancel-action: true
   overlay: true
+  # Use policy for the right-click action (throw/riptide):
+  # block     - the throw is fully blocked during the cooldown
+  # damage    - the throw works, all trident damage is blocked during the cooldown
+  # no-damage - the throw always works but deals no damage; attacks still have the cooldown
+  use-mode: "damage"
   bypass-permission: itemcooldowns.bypass.trident
 
 end-crystal:
@@ -41,6 +57,7 @@ end-crystal:
   cooldown-seconds: 45
   cancel-action: true
   overlay: true
+  use-mode: "block"
   bypass-permission: itemcooldowns.bypass.end-crystal
 
 respawn-anchor:
@@ -48,4 +65,5 @@ respawn-anchor:
   cooldown-seconds: 45
   cancel-action: true
   overlay: true
+  use-mode: "block"
   bypass-permission: itemcooldowns.bypass.respawn-anchor

@@ -8,7 +8,7 @@ Plugin that adds cooldowns to PvP items: **mace, spear, trident, end crystals an
 
 - **Mace** — 45 second cooldown between attacks
 - **Spear** (1.21.11+, all 7 variants) — 5 second cooldown between lunges (Jab/Charge) and attacks
-- **Trident** — 5 second cooldown between throws and attacks (a throw starts its cooldown only after the projectile is launched)
+- **Trident** — 5 second cooldown between throws, Riptide dashes and attacks
 - **End Crystal** — 45 second cooldown per use
 - **Respawn Anchor** — 45 second cooldown per use
 - **Ender pearl style visual cooldown**: the inventory slot is covered by a translucent white square that shrinks over time — works on every item of that type in the inventory
@@ -26,7 +26,7 @@ Plugin that adds cooldowns to PvP items: **mace, spear, trident, end crystals an
 
 ## Installation
 
-1. Download `ItemCooldowns-1.00.jar`
+1. Download `ItemCooldowns-1.01.jar`
 2. Place it in the server's `plugins` folder
 3. Restart the server
 4. On first start, `config.yml` and the `lang/` folder (with `messages-en.yml` and `messages-ru.yml` templates) are created
@@ -65,7 +65,6 @@ Example:
 locale: en            # message language: en, ru or your own
 
 pvp-only: true        # attack cooldowns only against players
-creative-to-survival-on-player-hit: false # switch a Creative attacker to Survival after a PvP hit
 
 worlds:
   enabled: false      # enable world whitelist
@@ -87,7 +86,23 @@ mace:
 
 Identical sections exist for `spear`, `trident`, `end-crystal`, `respawn-anchor`.
 
-`creative-to-survival-on-player-hit` is disabled by default. Set it to `true` only if Creative-mode attackers must be moved to Survival after a hit on another player.
+For `spear` and `trident` there is an extra option — `use-mode`:
+
+```yaml
+spear:
+  use-mode: "damage"   # block     - lunge/throw is fully blocked during the cooldown
+                       # damage    - lunge/throw works, all damage is blocked during the cooldown
+                       # no-damage - lunge/throw always works as movement but deals no damage
+```
+
+## PvPManager integration
+
+If **PvPManager** (SpigotMC #25420, including the ChanceSD fork v4) is installed, attacks that PvPManager blocks (newbie protection, respawn protection, PvP mode disabled, etc.) do **not** apply cooldowns and do **not** trigger the creative→survival switch. Configurable:
+
+```yaml
+pvpmanager:
+  enabled: true
+```
 
 ## Localization
 

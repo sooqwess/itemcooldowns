@@ -14,9 +14,9 @@ import java.util.Set;
 
 public final class Config {
 
+    private final FileConfiguration c;
     private final String locale;
     private final boolean pvpOnly;
-    private final boolean creativeToSurvivalOnPlayerHit;
     private final boolean worldsEnabled;
     private final List<String> worlds;
     private final boolean messagesEnabled;
@@ -25,10 +25,9 @@ public final class Config {
     private final List<ItemRule> rules = new ArrayList<>();
 
     public Config(JavaPlugin plugin) {
-        FileConfiguration c = plugin.getConfig();
+        this.c = plugin.getConfig();
         this.locale = c.getString("locale", "en");
         this.pvpOnly = c.getBoolean("pvp-only", true);
-        this.creativeToSurvivalOnPlayerHit = c.getBoolean("creative-to-survival-on-player-hit", false);
         this.worldsEnabled = c.getBoolean("worlds.enabled", false);
         this.worlds = c.getStringList("worlds.list");
         this.messagesEnabled = c.getBoolean("messages.enabled", true);
@@ -70,10 +69,6 @@ public final class Config {
         return pvpOnly;
     }
 
-    public boolean isCreativeToSurvivalOnPlayerHit() {
-        return creativeToSurvivalOnPlayerHit;
-    }
-
     public boolean isMessagesEnabled() {
         return messagesEnabled;
     }
@@ -82,7 +77,32 @@ public final class Config {
         return notifyStart;
     }
 
+    public boolean isCreativeToSurvivalOnPlayerHit() {
+        if (c.contains("creative-to-survival-on-player-hit")) {
+            return c.getBoolean("creative-to-survival-on-player-hit", false);
+        }
+        return c.getBoolean("gamemode.switch-creative-to-survival", false);
+    }
+
+    public boolean isPvPManagerEnabled() {
+        return c.getBoolean("pvpmanager.enabled", true);
+    }
+
     public static final class ItemRule {
+
+        public enum UseMode {
+            BLOCK,
+            DAMAGE,
+            NO_DAMAGE;
+
+            public static UseMode parse(String value) {
+                return switch (value == null ? "" : value.toLowerCase()) {
+                    case "block", "true" -> BLOCK;
+                    case "no-damage", "allow", "nodamage" -> NO_DAMAGE;
+                    default -> DAMAGE;
+                };
+            }
+        }
 
         private final String key;
         private final Kind kind;
@@ -90,6 +110,7 @@ public final class Config {
         private final boolean enabled;
         private final int seconds;
         private final boolean cancel;
+        private final UseMode useMode;
         private final boolean overlay;
         private final String bypassPermission;
 
@@ -99,6 +120,13 @@ public final class Config {
             this.enabled = c.getBoolean(key + ".enabled", true);
             this.seconds = Math.max(0, c.getInt(key + ".cooldown-seconds", defaultSeconds));
             this.cancel = c.getBoolean(key + ".cancel-action", true);
+            if (c.contains(key + ".use-mode")) {
+                this.useMode = UseMode.parse(c.getString(key + ".use-mode"));
+            } else if (c.contains(key + ".block-use")) {
+                this.useMode = c.getBoolean(key + ".block-use") ? UseMode.BLOCK : UseMode.DAMAGE;
+            } else {
+                this.useMode = kind == Kind.ATTACK_AND_USE ? UseMode.DAMAGE : UseMode.BLOCK;
+            }
             this.overlay = c.getBoolean(key + ".overlay", true);
             this.bypassPermission = c.getString(key + ".bypass-permission", defaultPermission);
             Set<Material> resolved = new HashSet<>();
@@ -133,6 +161,10 @@ public final class Config {
 
         public boolean isCancel() {
             return cancel;
+        }
+
+        public UseMode getUseMode() {
+            return useMode;
         }
 
         public boolean isOverlay() {
