@@ -1,15 +1,54 @@
-prefix: "&8[&bItemCooldowns&8] &r"
+# ==========================================================
+#  ItemCooldowns v2.0 — English
+#  Placeholders: {item}, {seconds}, {progress}, {player}
+#  Colors: & codes and &#RRGGBB hex colors.
+# ==========================================================
+
+prefix: '&#8B5CF6&lICD &8» &r'
+
 items:
-  mace: "&bMace"
-  spear: "&bSpear"
-  trident: "&bTrident"
-  end-crystal: "&bEnd Crystal"
-  respawn-anchor: "&bRespawn Anchor"
+  mace: '&#F5C542Mace'
+  spear: '&#F5C542Spear'
+  trident: '&#4FC3F7Trident'
+  end-crystal: '&#C77DFFEnd Crystal'
+  respawn-anchor: '&#C77DFFRespawn Anchor'
+  ender-pearl: '&#4FC3F7Ender Pearl'
+  crossbow: '&#F5C542Crossbow'
+  bow: '&#F5C542Bow'
+  shield: '&#4FC3F7Shield'
+  totem: '&#F5C542Totem'
+  wind-charge: '&#4FC3F7Wind Charge'
+
 cooldown:
-  blocked: "&c{item} is recharging! &e{seconds} &csec left."
-  started: "&7{item}: recharging &e{seconds} &7sec."
+  blocked: '&c{item} &7is on cooldown &8(&f{seconds}s&8)'
+  started: '&7Cooldown started for {item} &8(&f{seconds}s&8)'
+  ready: '{item} &ais ready'
+
 commands:
-  help: "&7Commands: &b/itemcooldowns reload &7- reload config"
-  reloaded: "&aConfiguration reloaded."
-  no-permission: "&cYou don't have permission."
-  unknown: "&cUnknown command. &b/itemcooldowns help"
+  help: "&7Commands:\n&8» &f/icd gui &7— cooldown menu\n&8» &f/icd check [item] &7— check remaining time\n&8» &f/icd reset <player> &7— clear cooldowns\n&8» &f/icd reload &7— reload config and locales"
+  reloaded: '&aConfiguration and locales reloaded.'
+  no-permission: '&cYou do not have permission to do that.'
+  unknown: '&cUnknown subcommand. &7Use &f/icd help&7.'
+  players-only: '&cThis command can only be used by a player.'
+  check-ready: '&aAll cooldowns are ready.'
+  check-nearest: '&7Nearest cooldown: &f{seconds}s'
+  unknown-item: '&cUnknown item: &f{item}'
+  usage-reset: '&7Usage: &f/icd reset <player>'
+  player-not-found: '&cPlayer not found: &f{player}'
+  reset: '&aCleared all cooldowns for &f{player}&a.'
+
+gui:
+  title: '&#8B5CF6Cooldowns &8» &7Menu'
+  ready: '&a✔ Ready'
+  remaining: '&c⏳ {seconds}s remaining'
+  progress: '&7{progress}'
+  total: '&8Base cooldown: &7{seconds}s'
+  empty: '&7No active cooldowns'
+  disabled: '&cThe cooldown menu is disabled on this server.'
+
+visual:
+  actionbar: '{item} &8▪ &f{seconds}s &8{progress}'
+  actionbar-ready: '&aAll cooldowns ready'
+  bossbar: '{item} &8— &f{seconds}s'
+  bossbar-ready: '&aAll cooldowns ready'
+  scoreboard-title: '&#8B5CF6Cooldowns'

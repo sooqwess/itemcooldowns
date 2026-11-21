@@ -1,0 +1,54 @@
+# ==========================================================
+#  ItemCooldowns v2.0 — Español
+#  Placeholders: {item}, {seconds}, {progress}, {player}
+#  Colors: & codes and &#RRGGBB hex colors.
+# ==========================================================
+
+prefix: '&#8B5CF6&lICD &8» &r'
+
+items:
+  mace: '&#F5C542Maza'
+  spear: '&#F5C542Lanza'
+  trident: '&#4FC3F7Tridente'
+  end-crystal: '&#C77DFFCristal del End'
+  respawn-anchor: '&#C77DFFAncla de reaparición'
+  ender-pearl: '&#4FC3F7Perla de Ender'
+  crossbow: '&#F5C542Ballesta'
+  bow: '&#F5C542Arco'
+  shield: '&#4FC3F7Escudo'
+  totem: '&#F5C542Tótem'
+  wind-charge: '&#4FC3F7Carga de viento'
+
+cooldown:
+  blocked: '&c{item} &7está en enfriamiento &8(&f{seconds}s&8)'
+  started: '&7Enfriamiento iniciado para {item} &8(&f{seconds}s&8)'
+  ready: '{item} &aya está listo'
+
+commands:
+  help: "&7Comandos:\n&8» &f/icd gui &7— menú de enfriamientos\n&8» &f/icd check [objeto] &7— ver tiempo restante\n&8» &f/icd reset <jugador> &7— borrar enfriamientos\n&8» &f/icd reload &7— recargar configuración e idiomas"
+  reloaded: '&aConfiguración e idiomas recargados.'
+  no-permission: '&cNo tienes permiso para eso.'
+  unknown: '&cSubcomando desconocido. &7Usa &f/icd help&7.'
+  players-only: '&cEste comando es solo para jugadores.'
+  check-ready: '&aTodos los enfriamientos están listos.'
+  check-nearest: '&7Enfriamiento más próximo: &f{seconds}s'
+  unknown-item: '&cObjeto desconocido: &f{item}'
+  usage-reset: '&7Uso: &f/icd reset <jugador>'
+  player-not-found: '&cJugador no encontrado: &f{player}'
+  reset: '&aEnfriamientos de &f{player}&a borrados.'
+
+gui:
+  title: '&#8B5CF6Enfriamientos &8» &7Menú'
+  ready: '&a✔ Listo'
+  remaining: '&c⏳ {seconds}s restantes'
+  progress: '&7{progress}'
+  total: '&8Enfriamiento base: &7{seconds}s'
+  empty: '&7Sin enfriamientos activos'
+  disabled: '&cEl menú de enfriamientos está desactivado en este servidor.'
+
+visual:
+  actionbar: '{item} &8▪ &f{seconds}s &8{progress}'
+  actionbar-ready: '&aTodos los enfriamientos listos'
+  bossbar: '{item} &8— &f{seconds}s'
+  bossbar-ready: '&aTodos los enfriamientos listos'
+  scoreboard-title: '&#8B5CF6Enfriamientos'

@@ -2,16 +2,20 @@ name: ItemCooldowns
 version: '${project.version}'
 main: com.sooqwess.itemcooldowns.ItemCooldowns
 api-version: '1.21'
+folia-supported: true
 author: Sooqwess
-description: PvP cooldowns for mace, spear, trident, end crystals and respawn anchors. Works on Paper, Spigot, Bukkit, Purpur, Pufferfish, Folia and other Bukkit forks, Minecraft 1.21 - 26.x.
+description: PvP cooldowns for mace, spear, trident, end crystals, respawn anchors, pearls, bows and more. Works on Paper, Spigot, Bukkit, Purpur, Pufferfish, Folia and other Bukkit forks, Minecraft 1.21 - 26.3.
 website: https://modrinth.com/plugin/item_cooldowns/
-softdepend: [LuckPerms]
+softdepend: [LuckPerms, PlaceholderAPI]
 commands:
   itemcooldowns:
     description: ItemCooldowns main command
-    aliases: [icd]
-    usage: /itemcooldowns <help|reload>
+    aliases: [icd, cooldowns]
+    usage: /itemcooldowns <gui|check|reset|reload|help>
 permissions:
+  itemcooldowns.use:
+    description: Allows opening the cooldown menu
+    default: true
   itemcooldowns.bypass:
     description: Bypass all item cooldowns
     default: false
@@ -21,6 +25,12 @@ permissions:
       itemcooldowns.bypass.trident: true
       itemcooldowns.bypass.end-crystal: true
       itemcooldowns.bypass.respawn-anchor: true
+      itemcooldowns.bypass.ender-pearl: true
+      itemcooldowns.bypass.crossbow: true
+      itemcooldowns.bypass.bow: true
+      itemcooldowns.bypass.shield: true
+      itemcooldowns.bypass.totem: true
+      itemcooldowns.bypass.wind-charge: true
   itemcooldowns.bypass.mace:
     description: Bypass mace cooldown
     default: false
@@ -36,6 +46,24 @@ permissions:
   itemcooldowns.bypass.respawn-anchor:
     description: Bypass respawn anchor cooldown
     default: false
+  itemcooldowns.bypass.ender-pearl:
+    description: Bypass ender pearl cooldown
+    default: false
+  itemcooldowns.bypass.crossbow:
+    description: Bypass crossbow cooldown
+    default: false
+  itemcooldowns.bypass.bow:
+    description: Bypass bow cooldown
+    default: false
+  itemcooldowns.bypass.shield:
+    description: Bypass shield cooldown
+    default: false
+  itemcooldowns.bypass.totem:
+    description: Bypass totem cooldown
+    default: false
+  itemcooldowns.bypass.wind-charge:
+    description: Bypass wind charge cooldown
+    default: false
   itemcooldowns.admin:
-    description: Allows reloading the plugin config
+    description: Reload config, reset cooldowns
     default: op

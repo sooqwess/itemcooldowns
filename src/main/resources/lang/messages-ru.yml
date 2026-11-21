@@ -1,15 +1,54 @@
-prefix: "&8[&bItemCooldowns&8] &r"
+# ==========================================================
+#  ItemCooldowns v2.0 — Русский
+#  Placeholders: {item}, {seconds}, {progress}, {player}
+#  Colors: & codes and &#RRGGBB hex colors.
+# ==========================================================
+
+prefix: '&#8B5CF6&lICD &8» &r'
+
 items:
-  mace: "&bБулава"
-  spear: "&bКопьё"
-  trident: "&bТрезубец"
-  end-crystal: "&bКристалл Энда"
-  respawn-anchor: "&bЯкорь возрождения"
+  mace: '&#F5C542Булава'
+  spear: '&#F5C542Копьё'
+  trident: '&#4FC3F7Трезубец'
+  end-crystal: '&#C77DFFКристалл Края'
+  respawn-anchor: '&#C77DFFЯкорь возрождения'
+  ender-pearl: '&#4FC3F7Эндер-жемчуг'
+  crossbow: '&#F5C542Арбалет'
+  bow: '&#F5C542Лук'
+  shield: '&#4FC3F7Щит'
+  totem: '&#F5C542Тотем'
+  wind-charge: '&#4FC3F7Заряд ветра'
+
 cooldown:
-  blocked: "&c{item} перезаряжается! Осталось &e{seconds} &cсек."
-  started: "&7{item}: перезарядка &e{seconds} &7сек."
+  blocked: '&c{item} &7перезаряжается &8(&f{seconds} с&8)'
+  started: '&7Кулдаун {item} запущен &8(&f{seconds} с&8)'
+  ready: '{item} &aснова готов'
+
 commands:
-  help: "&7Команды: &b/itemcooldowns reload &7- перезагрузить конфиг"
-  reloaded: "&aКонфигурация перезагружена."
-  no-permission: "&cУ вас недостаточно прав."
-  unknown: "&cНеизвестная команда. &b/itemcooldowns help"
+  help: "&7Команды:\n&8» &f/icd gui &7— меню кулдаунов\n&8» &f/icd check [предмет] &7— проверить остаток\n&8» &f/icd reset <игрок> &7— сбросить кулдауны\n&8» &f/icd reload &7— перезагрузить конфиг и языки"
+  reloaded: '&aКонфигурация и языки перезагружены.'
+  no-permission: '&cУ вас нет прав на это действие.'
+  unknown: '&cНеизвестная подкоманда. &7Используйте &f/icd help&7.'
+  players-only: '&cЭта команда доступна только игроку.'
+  check-ready: '&aВсе кулдауны готовы.'
+  check-nearest: '&7Ближайший кулдаун: &f{seconds} с'
+  unknown-item: '&cНеизвестный предмет: &f{item}'
+  usage-reset: '&7Использование: &f/icd reset <игрок>'
+  player-not-found: '&cИгрок не найден: &f{player}'
+  reset: '&aКулдауны игрока &f{player}&a сброшены.'
+
+gui:
+  title: '&#8B5CF6Кулдауны &8» &7Меню'
+  ready: '&a✔ Готов'
+  remaining: '&c⏳ осталось {seconds} с'
+  progress: '&7{progress}'
+  total: '&8Базовый кулдаун: &7{seconds} с'
+  empty: '&7Нет активных кулдаунов'
+  disabled: '&cМеню кулдаунов отключено на этом сервере.'
+
+visual:
+  actionbar: '{item} &8▪ &f{seconds} с &8{progress}'
+  actionbar-ready: '&aВсе кулдауны готовы'
+  bossbar: '{item} &8— &f{seconds} с'
+  bossbar-ready: '&aВсе кулдауны готовы'
+  scoreboard-title: '&#8B5CF6Кулдауны'

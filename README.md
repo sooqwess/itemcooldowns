@@ -1,113 +1,164 @@
-# ItemCooldowns
+<div align="center">
 
-[![Modrinth](https://img.shields.io/modrinth/v/item_cooldowns?label=Modrinth&style=flat-square)](https://modrinth.com/plugin/item_cooldowns)
+# ItemCooldowns · 2.0
 
-Plugin that adds cooldowns to PvP items: **mace, spear, trident, end crystals and respawn anchors**. When a player tries to use an item during its cooldown, the action is cancelled and a chat message is shown.
+**Clear timing. Fair fights.**
 
-## Features
+PvP item cooldowns with a purple-and-gold menu, live timers and per-player protection.
 
-- **Mace** — 45 second cooldown between attacks
-- **Spear** (1.21.11+, all 7 variants) — 5 second cooldown between lunges (Jab/Charge) and attacks
-- **Trident** — 5 second cooldown between throws and attacks (a throw starts its cooldown only after the projectile is launched)
-- **End Crystal** — 45 second cooldown per use
-- **Respawn Anchor** — 45 second cooldown per use
-- **Ender pearl style visual cooldown**: the inventory slot is covered by a translucent white square that shrinks over time — works on every item of that type in the inventory
-- Chat message when a player tries to use an item during its cooldown
-- Fully configurable: duration, action cancel, overlay, messages
-- `pvp-only`: mace/spear/trident attacks only trigger cooldowns against players (default)
-- World whitelist (disabled by default — works everywhere)
+[Modrinth](https://modrinth.com/plugin/item_cooldowns) · [Gallery](docs/gallery/index.html) · [Test report](docs/TESTING.md)
 
-## Compatibility
+![Live feedback from a real Paper test server](docs/gallery/01-overview.png)
 
-- **Server software**: Paper, Spigot, Bukkit, Purpur, Pufferfish, Leaves and any other Bukkit fork. On Fabric/Quilt it works through Banner/CardBoard
-- **Minecraft versions**: **1.21 – 26.x** (Java 21+). The spear only exists since 1.21.11 — on older versions that rule automatically disables itself
-- **Folia**: the plugin uses no schedulers, fully compatible
-- **LuckPerms**: plugin permissions are managed through LuckPerms
+</div>
 
-## Installation
+## What's new
 
-1. Download `ItemCooldowns-1.00.jar`
-2. Place it in the server's `plugins` folder
-3. Restart the server
-4. On first start, `config.yml` and the `lang/` folder (with `messages-en.yml` and `messages-ru.yml` templates) are created
+- **Live feedback:** ActionBar, BossBar, sidebar, sounds and particles, individually configurable.
+- **Cooldown menu:** `/icd` or `/cooldowns`, with a pixel-style purple/gold border, ready status, remaining time and a progress indicator.
+- **10 bundled languages:** English, Russian, German, Spanish, French, Portuguese, Chinese, Japanese, Korean and Ukrainian.
+- **`locale: auto`:** use each player's client language; set `locale: ru` (or another code) to force one language.
+- **Optional PlaceholderAPI integration** for custom HUDs and menus.
+- **Per-player, per-material storage:** atomic check/start prevents concurrent attempts from bypassing a running timer.
+- **Spam-limited blocked feedback:** at most one message/sound/particle burst per player per second; every disallowed attempt is still cancelled.
+- **Tridents start on launch**, not on right-click or during charging. Bows/crossbows use the actual shot event.
+- Optional **Creative → Survival** conversion when a Creative player hits another player; off by default.
 
-## Permissions (LuckPerms)
+## Compatibility: target vs. verification
 
-Bypass permissions are **not granted by default to anyone, even operators** — grant them manually:
+**Target:** Minecraft **1.21–26.3**, on Bukkit-compatible servers: Paper, Spigot, Bukkit, Purpur, Pufferfish, Leaves and Folia. Unsupported materials are resolved by name and automatically skipped on older versions.
 
-| Permission | Description |
-|---|---|
-| `itemcooldowns.bypass.mace` | Bypass mace cooldown |
-| `itemcooldowns.bypass.spear` | Bypass spear cooldown |
-| `itemcooldowns.bypass.trident` | Bypass trident cooldown |
-| `itemcooldowns.bypass.end-crystal` | Bypass end crystal cooldown |
-| `itemcooldowns.bypass.respawn-anchor` | Bypass respawn anchor cooldown |
-| `itemcooldowns.bypass` | Bypass all cooldowns (parent permission) |
-| `itemcooldowns.admin` | Access to `/itemcooldowns reload` (default: operators) |
+**Actually verified in this workspace:** Paper **1.21.11 build 132**, with a real vanilla client, plus 11 standalone tracker assertions. This is **not** proof that every version/core combination works. Folia, Spigot, the 26.x runtime and PlaceholderAPI still require separate integration tests; see the [test report](docs/TESTING.md).
 
-Example:
+The plugin is compiled to **Java 21 bytecode**. Use the Java runtime required by your Minecraft server; newer Minecraft releases may require a newer Java version. Proxy servers (BungeeCord/Waterfall/Velocity), Fabric and Quilt are not standalone Bukkit plugin hosts. Compatibility bridges are not tested or guaranteed.
 
-```
-/lp user Sooqwess permission set itemcooldowns.bypass.mace true
-/lp group vip permission set itemcooldowns.bypass true
-```
+## Installation / upgrade
+
+1. Back up the existing configuration and language files.
+2. Stop the server. Remove the previous ItemCooldowns JAR (do not keep both versions).
+3. Install `ItemCooldowns-2.0.0.jar` into `plugins/` and start the server.
+4. Review `plugins/ItemCooldowns/config.yml`, particularly the visual and optional-item sections.
+5. Existing values and on-disk locale customizations are retained. To adopt the new translated wording/colors fully, back up and regenerate the old locale files.
+
+No resource pack or client mod is required. Vanilla inventory chrome stays vanilla; a fully custom dark inventory background would require a resource pack. The menu uses colored glass borders and styled text without one.
+
+## Default rules
+
+| Item | Duration | Enabled by default | Trigger |
+|---|---:|:---:|---|
+| Mace | 45 s | Yes | PvP hit |
+| Spear (available materials only) | 5 s | Yes | Attack/use |
+| Trident | 5 s | Yes | Actual projectile launch, melee attack, Riptide event |
+| End crystal | 45 s | Yes | Right-click block use attempt |
+| Respawn anchor | 45 s | Yes | Right-click block use attempt |
+| Ender pearl | 5 s | No | Right-click use |
+| Bow | 2 s | No | Shot |
+| Crossbow | 5 s | No | Shot |
+| Shield | 5 s | No | Right-click use |
+| Totem | 30 s | No | Resurrect event |
+| Wind charge | 3 s | No | Right-click use |
+
+Cooldowns reset on disconnect and are not persisted. Crystal/anchor rules gate use attempts, not confirmed successful placements. Bypass permissions default to **false**, including for operators.
 
 ## Commands
 
-| Command | Description |
-|---|---|
-| `/itemcooldowns help` (alias: `/icd`) | Help |
-| `/itemcooldowns reload` | Reload config and locale files |
+Aliases: `/itemcooldowns`, `/icd`, `/cooldowns`.
+
+| Command | Purpose | Permission |
+|---|---|---|
+| `/icd` or `/icd gui` | Open the live menu | `itemcooldowns.use` (default true) |
+| `/icd check [item]` | Check remaining time | Everyone |
+| `/icd help` | Help | Everyone |
+| `/icd reset [player]` | Clear timers; omitted player means yourself | `itemcooldowns.admin` |
+| `/icd reload` | Reload config/locales; clears plugin timers | `itemcooldowns.admin` |
 
 ## Configuration
 
+The complete, commented [config.yml](src/main/resources/config.yml) ships in the JAR.
+
 ```yaml
-locale: en            # message language: en, ru or your own
+locale: auto  # or en, ru, de, es, fr, pt, zh, ja, ko, uk
+pvp-only: true
+creative-to-survival-on-player-hit: false
 
-pvp-only: true        # attack cooldowns only against players
-creative-to-survival-on-player-hit: false # switch a Creative attacker to Survival after a PvP hit
+visuals:
+  actionbar:
+    enabled: true
+  bossbar:
+    enabled: true
+  scoreboard:
+    enabled: true
+  gui:
+    enabled: true
+  sounds:
+    enabled: true
+  particles:
+    enabled: true
 
-worlds:
-  enabled: false      # enable world whitelist
-  list:
-    - world
-    - world_pvp
-
-messages:
-  enabled: true       # chat messages
-  notify-start: false # message when a cooldown starts
-
-mace:
+trident:
   enabled: true
-  cooldown-seconds: 45   # cooldown length
-  cancel-action: true    # cancel the action during cooldown
-  overlay: true          # white cooldown overlay on the slot
-  bypass-permission: itemcooldowns.bypass.mace
+  cooldown-seconds: 5
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.trident
+  actionbar: true
+  bossbar: true
 ```
 
-Identical sections exist for `spear`, `trident`, `end-crystal`, `respawn-anchor`.
+**Sidebar interoperability:** disable `visuals.scoreboard.enabled` if another plugin owns the sidebar. ItemCooldowns temporarily replaces the player's scoreboard while a timer is active and tries to restore the previous one afterwards.
 
-`creative-to-survival-on-player-hit` is disabled by default. Set it to `true` only if Creative-mode attackers must be moved to Survival after a hit on another player.
+**Vanilla overlay vs. blocked feedback:** the white slot overlay may make the client suppress repeated use packets. The server cannot display a new blocked message for a packet it never receives. For server-driven blocked feedback on items such as crystals, set that rule's `overlay: false`; ActionBar/BossBar/sidebar still show the timer. Gallery capture uses this setting for crystals.
 
-## Localization
+`worlds.enabled`, `worlds.whitelist` and `worlds.list` provide world filtering. Set the Creative → Survival option to true only if that gameplay change is intended.
 
-The `plugins/ItemCooldowns/lang/` folder contains `messages-en.yml` and `messages-ru.yml` (both are extracted on first start). To add your own language, copy a file as `messages-<code>.yml`, edit it and set `locale: <code>` in the config. Missing strings fall back to the bundled English template, then to Russian.
+## Languages / customization
 
-Placeholders in messages: `{item}` — item name, `{seconds}` — remaining seconds.
+The first launch extracts `lang/messages-<code>.yml` for all ten bundled languages. Missing keys fall back to the bundled English template. To add a custom language, copy a template and set `locale: <code>`. Auto selection recognizes the ten bundled language families, including regional client codes such as `pt_br`.
 
-## Notes
+Message placeholders: `{item}`, `{seconds}`, `{progress}`, `{player}` where relevant. Supports `&` formatting and `&#RRGGBB` hex colors. Sounds and particles can be disabled independently; unknown enum names are ignored.
 
-- Cooldowns reset when a player leaves the server
-- Crystals/anchors start the cooldown on right-click use (attempt)
+## Permissions
 
-## Building from source
+- `itemcooldowns.use`: menu access, default true.
+- `itemcooldowns.admin`: reload/reset, default operators.
+- `itemcooldowns.bypass`: bypass all rules, default false.
+- `itemcooldowns.bypass.<item-key>`: bypass a single rule, default false.
 
+Item keys: `mace`, `spear`, `trident`, `end-crystal`, `respawn-anchor`, `ender-pearl`, `bow`, `crossbow`, `shield`, `totem`, `wind-charge`.
+
+LuckPerms example: `/lp group vip permission set itemcooldowns.bypass.trident true`.
+
+## PlaceholderAPI (optional)
+
+Install PlaceholderAPI; the expansion registers automatically. No eCloud download is needed.
+
+| Placeholder | Result |
+|---|---|
+| `%itemcooldowns_active%` | Active cooldown count |
+| `%itemcooldowns_nearest%` | Selected active item key or `ready` |
+| `%itemcooldowns_nearest_seconds%` | Selected timer in seconds, or `0` |
+| `%itemcooldowns_trident_seconds%` | Trident remaining seconds |
+| `%itemcooldowns_trident_ready%` | `true` / `false` |
+
+Replace `trident` with another item key for the item-specific placeholders. The current `nearest` selection uses the **longest remaining** timer. For multi-material rules, item-specific status shows the longest remaining timer across their materials; the tracker stores each material separately.
+
+## Gallery
+
+Real captures from an isolated Paper test server, not AI concepts. Four presentation cards add external typography/framing only. Untouched screenshots are included in [docs/gallery/originals](docs/gallery/originals/).
+
+![Menu with a live timer](docs/gallery/02-menu.png)
+
+## Build / test
+
+Java 21+ and Maven 3.9+:
+
+```sh
+mvn package
+bash tools/test-tracker.sh
 ```
-mvn -DskipTests package
-```
 
-The jar appears in `target/`.
+Output: `target/ItemCooldowns-2.0.0.jar`. The standalone tracker test is explicitly invoked by the script; it is not a JUnit suite automatically executed by Surefire. To regenerate the presentation gallery, install Pillow and run `python3 tools/make-gallery.py` (the script uses DejaVu fonts).
 
 ## License
 
-MIT. Author: **Sooqwess**.
+MIT · Sooqwess

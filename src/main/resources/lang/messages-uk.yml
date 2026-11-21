@@ -1,0 +1,54 @@
+# ==========================================================
+#  ItemCooldowns v2.0 — Українська
+#  Placeholders: {item}, {seconds}, {progress}, {player}
+#  Colors: & codes and &#RRGGBB hex colors.
+# ==========================================================
+
+prefix: '&#8B5CF6&lICD &8» &r'
+
+items:
+  mace: '&#F5C542Булава'
+  spear: '&#F5C542Спис'
+  trident: '&#4FC3F7Тризуб'
+  end-crystal: '&#C77DFFКристал Енду'
+  respawn-anchor: '&#C77DFFЯкір відродження'
+  ender-pearl: '&#4FC3F7Ендер-перлина'
+  crossbow: '&#F5C542Арбалет'
+  bow: '&#F5C542Лук'
+  shield: '&#4FC3F7Щит'
+  totem: '&#F5C542Тотем'
+  wind-charge: '&#4FC3F7Заряд вітру'
+
+cooldown:
+  blocked: '&c{item} &7перезаряджається &8(&f{seconds} с&8)'
+  started: '&7Кулдаун {item} запущено &8(&f{seconds} с&8)'
+  ready: '{item} &aзнову готовий'
+
+commands:
+  help: "&7Команди:\n&8» &f/icd gui &7— меню кулдаунів\n&8» &f/icd check [предмет] &7— перевірити залишок\n&8» &f/icd reset <гравець> &7— скинути кулдауни\n&8» &f/icd reload &7— перезавантажити конфіг і мови"
+  reloaded: '&aКонфігурацію та мови перезавантажено.'
+  no-permission: '&cУ вас немає прав на цю дію.'
+  unknown: '&cНевідома підкоманда. &7Використайте &f/icd help&7.'
+  players-only: '&cЦя команда доступна лише гравцеві.'
+  check-ready: '&aУсі кулдауни готові.'
+  check-nearest: '&7Найближчий кулдаун: &f{seconds} с'
+  unknown-item: '&cНевідомий предмет: &f{item}'
+  usage-reset: '&7Використання: &f/icd reset <гравець>'
+  player-not-found: '&cГравця не знайдено: &f{player}'
+  reset: '&aКулдауни гравця &f{player}&a скинуто.'
+
+gui:
+  title: '&#8B5CF6Кулдауни &8» &7Меню'
+  ready: '&a✔ Готово'
+  remaining: '&c⏳ залишилось {seconds} с'
+  progress: '&7{progress}'
+  total: '&8Базовий кулдаун: &7{seconds} с'
+  empty: '&7Немає активних кулдаунів'
+  disabled: '&cМеню кулдаунів вимкнено на цьому сервері.'
+
+visual:
+  actionbar: '{item} &8▪ &f{seconds} с &8{progress}'
+  actionbar-ready: '&aУсі кулдауни готові'
+  bossbar: '{item} &8— &f{seconds} с'
+  bossbar-ready: '&aУсі кулдауни готові'
+  scoreboard-title: '&#8B5CF6Кулдауни'

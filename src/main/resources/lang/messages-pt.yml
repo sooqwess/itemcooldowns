@@ -1,0 +1,54 @@
+# ==========================================================
+#  ItemCooldowns v2.0 — Português
+#  Placeholders: {item}, {seconds}, {progress}, {player}
+#  Colors: & codes and &#RRGGBB hex colors.
+# ==========================================================
+
+prefix: '&#8B5CF6&lICD &8» &r'
+
+items:
+  mace: '&#F5C542Maça'
+  spear: '&#F5C542Lança'
+  trident: '&#4FC3F7Tridente'
+  end-crystal: '&#C77DFFCristal do End'
+  respawn-anchor: '&#C77DFFÂncora de renascimento'
+  ender-pearl: '&#4FC3F7Pérola do Ender'
+  crossbow: '&#F5C542Besta'
+  bow: '&#F5C542Arco'
+  shield: '&#4FC3F7Escudo'
+  totem: '&#F5C542Totem'
+  wind-charge: '&#4FC3F7Carga de vento'
+
+cooldown:
+  blocked: '&c{item} &7está em recarga &8(&f{seconds}s&8)'
+  started: '&7Recarga iniciada para {item} &8(&f{seconds}s&8)'
+  ready: '{item} &aestá pronto novamente'
+
+commands:
+  help: "&7Comandos:\n&8» &f/icd gui &7— menu de recargas\n&8» &f/icd check [item] &7— ver tempo restante\n&8» &f/icd reset <jogador> &7— limpar recargas\n&8» &f/icd reload &7— recarregar config e idiomas"
+  reloaded: '&aConfiguração e idiomas recarregados.'
+  no-permission: '&cVocê não tem permissão para isso.'
+  unknown: '&cSubcomando desconhecido. &7Use &f/icd help&7.'
+  players-only: '&cEste comando é apenas para jogadores.'
+  check-ready: '&aTodas as recargas estão prontas.'
+  check-nearest: '&7Recarga mais próxima: &f{seconds}s'
+  unknown-item: '&cItem desconhecido: &f{item}'
+  usage-reset: '&7Uso: &f/icd reset <jogador>'
+  player-not-found: '&cJogador não encontrado: &f{player}'
+  reset: '&aRecargas de &f{player}&a limpas.'
+
+gui:
+  title: '&#8B5CF6Recargas &8» &7Menu'
+  ready: '&a✔ Pronto'
+  remaining: '&c⏳ {seconds}s restantes'
+  progress: '&7{progress}'
+  total: '&8Recarga base: &7{seconds}s'
+  empty: '&7Nenhuma recarga ativa'
+  disabled: '&cO menu de recargas está desativado neste servidor.'
+
+visual:
+  actionbar: '{item} &8▪ &f{seconds}s &8{progress}'
+  actionbar-ready: '&aTodas as recargas prontas'
+  bossbar: '{item} &8— &f{seconds}s'
+  bossbar-ready: '&aTodas as recargas prontas'
+  scoreboard-title: '&#8B5CF6Recargas'

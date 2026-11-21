@@ -11,9 +11,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
@@ -22,6 +24,7 @@ import java.lang.reflect.Method;
 public final class CooldownListener implements Listener {
 
     private final ItemCooldowns plugin;
+    private final java.util.Map<java.util.UUID, Long> lastBlockedFeedback = new java.util.concurrent.ConcurrentHashMap<>();
     private final Method useItemInHand;
     private final Method setUseItemInHand;
 
@@ -69,7 +72,9 @@ public final class CooldownListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         // Do not retain a player's cooldown or make it survive reconnecting.
+        lastBlockedFeedback.remove(event.getPlayer().getUniqueId());
         plugin.getTracker().clear(event.getPlayer());
+        plugin.getVisuals().forget(event.getPlayer());
     }
 
     /** Handles Riptide separately because it does not create a trident projectile. */
@@ -106,6 +111,39 @@ public final class CooldownListener implements Listener {
         }
     }
 
+    /** Bow shots: cooldown starts on the actual shot, not on draw. */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onBowShoot(EntityShootBowEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+        Config config = plugin.getConfigManager();
+        if (!config.isWorldAllowed(player.getWorld())) {
+            return;
+        }
+        Material bow = event.getBow() != null ? event.getBow().getType() : Material.BOW;
+        Config.ItemRule rule = config.ruleFor(bow);
+        if (rule != null && rule.getKind() == Kind.SHOOT_ONLY) {
+            handle(player, bow, rule, event);
+        }
+    }
+
+    /** Totem consumption starts its cooldown after the resurrect succeeds. */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onTotemResurrect(EntityResurrectEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+        Config config = plugin.getConfigManager();
+        if (!config.isWorldAllowed(player.getWorld())) {
+            return;
+        }
+        Config.ItemRule rule = config.ruleFor(Material.TOTEM_OF_UNDYING);
+        if (rule != null && rule.getKind() == Kind.RESURRECT_ONLY) {
+            handle(player, Material.TOTEM_OF_UNDYING, rule, event);
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
@@ -125,7 +163,13 @@ public final class CooldownListener implements Listener {
         if (material == Material.TRIDENT) {
             return;
         }
-        if (action == Action.RIGHT_CLICK_AIR && rule.getKind() == Kind.BLOCK_USE) {
+        // Bows are handled by PlayerShootBowEvent (actual shot), not by draw.
+        if (material == Material.BOW) {
+            return;
+        }
+        if (action == Action.RIGHT_CLICK_AIR && rule.getKind() == Kind.BLOCK_USE
+                && (material == Material.END_CRYSTAL || material == Material.RESPAWN_ANCHOR)) {
+            // Crystals/anchors are placed on blocks; air clicks do nothing.
             return;
         }
         Player player = event.getPlayer();
@@ -158,10 +202,17 @@ public final class CooldownListener implements Listener {
             if (rule.isCancel()) {
                 cancel(player, material, event);
             }
-            plugin.getLang().sendBlocked(player, rule, remaining);
+            long now = System.currentTimeMillis();
+            Long last = lastBlockedFeedback.get(player.getUniqueId());
+            if (last == null || now - last >= 1000L) {
+                lastBlockedFeedback.put(player.getUniqueId(), now);
+                plugin.getLang().sendBlocked(player, rule, remaining);
+                plugin.getVisuals().playBlocked(player);
+            }
             return;
         }
         plugin.getLang().sendStarted(player, rule, rule.getSeconds());
+        plugin.getVisuals().playStarted(player);
     }
 
     private void cancel(Player player, Material material, Cancellable event) {

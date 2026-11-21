@@ -1,0 +1,54 @@
+# ==========================================================
+#  ItemCooldowns v2.0 — 简体中文
+#  Placeholders: {item}, {seconds}, {progress}, {player}
+#  Colors: & codes and &#RRGGBB hex colors.
+# ==========================================================
+
+prefix: '&#8B5CF6&lICD &8» &r'
+
+items:
+  mace: '&#F5C542重锤'
+  spear: '&#F5C542长矛'
+  trident: '&#4FC3F7三叉戟'
+  end-crystal: '&#C77DFF末地水晶'
+  respawn-anchor: '&#C77DFF重生锚'
+  ender-pearl: '&#4FC3F7末影珍珠'
+  crossbow: '&#F5C542弩'
+  bow: '&#F5C542弓'
+  shield: '&#4FC3F7盾牌'
+  totem: '&#F5C542不死图腾'
+  wind-charge: '&#4FC3F7风弹'
+
+cooldown:
+  blocked: '&c{item} &7正在冷却 &8(&f{seconds}秒&8)'
+  started: '&7{item} 冷却开始 &8(&f{seconds}秒&8)'
+  ready: '{item} &a已就绪'
+
+commands:
+  help: "&7命令:\n&8» &f/icd gui &7— 冷却菜单\n&8» &f/icd check [物品] &7— 查看剩余时间\n&8» &f/icd reset <玩家> &7— 清除冷却\n&8» &f/icd reload &7— 重载配置与语言"
+  reloaded: '&a配置与语言已重载。'
+  no-permission: '&c你没有执行此操作的权限。'
+  unknown: '&c未知子命令。 &7请使用 &f/icd help&7。'
+  players-only: '&c此命令只能由玩家执行。'
+  check-ready: '&a所有冷却均已就绪。'
+  check-nearest: '&7最近的冷却: &f{seconds}秒'
+  unknown-item: '&c未知物品: &f{item}'
+  usage-reset: '&7用法: &f/icd reset <玩家>'
+  player-not-found: '&c找不到玩家: &f{player}'
+  reset: '&a已清除 &f{player}&a 的所有冷却。'
+
+gui:
+  title: '&#8B5CF6冷却 &8» &7菜单'
+  ready: '&a✔ 就绪'
+  remaining: '&c⏳ 剩余 {seconds}秒'
+  progress: '&7{progress}'
+  total: '&8基础冷却: &7{seconds}秒'
+  empty: '&7没有正在冷却的物品'
+  disabled: '&c本服务器已禁用冷却菜单。'
+
+visual:
+  actionbar: '{item} &8▪ &f{seconds}秒 &8{progress}'
+  actionbar-ready: '&a所有冷却已就绪'
+  bossbar: '{item} &8— &f{seconds}秒'
+  bossbar-ready: '&a所有冷却已就绪'
+  scoreboard-title: '&#8B5CF6冷却'

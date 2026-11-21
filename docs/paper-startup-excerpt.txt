@@ -1,0 +1,17 @@
+[17:24:34] [ServerMain/INFO]: [bootstrap] Loading Paper 1.21.11-132-ver/1.21.11@c5eb079 (2026-05-11T11:43:09Z) for Minecraft 1.21.11
+[17:25:04] [Server thread/INFO]: [ItemCooldowns] Loading server plugin ItemCooldowns v2.0.0
+[17:25:05] [Server thread/INFO]: [ItemCooldowns] Enabling ItemCooldowns v2.0.0
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] PlaceholderAPI not found: placeholders disabled.
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'mace': 45s cooldown, 1 material(s), kind=ATTACK_ONLY
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'spear': 5s cooldown, 7 material(s), kind=ATTACK_AND_USE
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'trident': 5s cooldown, 1 material(s), kind=ATTACK_AND_USE
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'end-crystal': 45s cooldown, 1 material(s), kind=BLOCK_USE
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'respawn-anchor': 45s cooldown, 1 material(s), kind=BLOCK_USE
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'ender-pearl': disabled or not supported on this server version
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'bow': disabled or not supported on this server version
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'crossbow': disabled or not supported on this server version
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'shield': disabled or not supported on this server version
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'totem': disabled or not supported on this server version
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] Rule 'wind-charge': disabled or not supported on this server version
+[17:25:06] [Server thread/INFO]: [ItemCooldowns] ItemCooldowns v2.0.0 enabled (locale auto, visuals: actionbar=true bossbar=true gui=true). Author: Sooqwess
+[17:25:07] [Server thread/INFO]: Done (34.227s)! For help, type "help"

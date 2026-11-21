@@ -1,19 +1,69 @@
-locale: en
+# ==========================================================
+#  ItemCooldowns v2.0 — by Sooqwess
+#  PvP cooldowns for mace, spear, trident, end crystals,
+#  respawn anchors, pearls, bows and more.
+#  Works on Paper / Spigot / Bukkit / Purpur / Pufferfish /
+#  Leaves / Folia, Minecraft 1.21 – 26.3.
+# ==========================================================
 
+# Message language.
+#   auto  -> each player sees their own client language (recommended)
+#   en, ru, de, es, fr, pt, zh, ja, ko, uk -> force one language
+# Add your own: copy lang/messages-en.yml to lang/messages-<code>.yml
+locale: auto
+
+# Attack cooldowns (mace/spear/trident) only trigger against players.
 pvp-only: true
 
-# When enabled, a Creative-mode attacker is switched to Survival after hitting a player.
+# Creative attacker -> Survival after hitting a player.
+#   false -> game mode is never changed
+#   true  -> a Creative player who hits another player is set to Survival
 creative-to-survival-on-player-hit: false
 
 worlds:
-  enabled: false
+  enabled: false      # enable the world filter
+  whitelist: true     # true -> only worlds in the list; false -> all except the list
   list:
     - world
     - world_pvp
 
 messages:
-  enabled: true
-  notify-start: false
+  enabled: true       # chat messages at all
+  notify-start: false # "cooldown started" message
+  notify-ready: true  # "cooldown finished" message
+
+visuals:
+  actionbar:
+    enabled: true
+    show-ready: false   # show a small "ready" actionbar when everything is off cooldown
+  bossbar:
+    enabled: true
+    show-ready: false
+  scoreboard:
+    enabled: true       # sidebar; disable when another plugin owns the sidebar
+  gui:
+    enabled: true       # /cooldowns opens the cooldown menu
+  sounds:
+    enabled: true
+    started: BLOCK_NOTE_BLOCK_HARP
+    blocked: ENTITY_VILLAGER_NO
+    ready: BLOCK_NOTE_BLOCK_PLING
+  particles:
+    enabled: true
+    blocked: SMOKE_NORMAL
+    ready: HAPPY_VILLAGER
+    count: 8
+
+# ----------------------------------------------------------
+#  Per-item rules. Identical sections exist for every item:
+#    enabled            – turn the rule on/off
+#    cooldown-seconds   – cooldown length
+#    cancel-action      – cancel the action while on cooldown
+#    overlay            – white vanilla overlay on the inventory slot
+#    bypass-permission  – permission that skips this cooldown
+#    actionbar          – include this item in the actionbar timer
+#    bossbar            – include this item in the bossbar timer
+# ----------------------------------------------------------
 
 mace:
   enabled: true
@@ -21,13 +71,17 @@ mace:
   cancel-action: true
   overlay: true
   bypass-permission: itemcooldowns.bypass.mace
+  actionbar: true
+  bossbar: true
 
-spear:
+spear:               # 1.21.11+ only; auto-disables on older versions
   enabled: true
   cooldown-seconds: 5
   cancel-action: true
   overlay: true
   bypass-permission: itemcooldowns.bypass.spear
+  actionbar: true
+  bossbar: true
 
 trident:
   enabled: true
@@ -35,6 +89,8 @@ trident:
   cancel-action: true
   overlay: true
   bypass-permission: itemcooldowns.bypass.trident
+  actionbar: true
+  bossbar: true
 
 end-crystal:
   enabled: true
@@ -42,6 +98,8 @@ end-crystal:
   cancel-action: true
   overlay: true
   bypass-permission: itemcooldowns.bypass.end-crystal
+  actionbar: true
+  bossbar: true
 
 respawn-anchor:
   enabled: true
@@ -49,3 +107,59 @@ respawn-anchor:
   cancel-action: true
   overlay: true
   bypass-permission: itemcooldowns.bypass.respawn-anchor
+  actionbar: true
+  bossbar: true
+
+ender-pearl:
+  enabled: false
+  cooldown-seconds: 5
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.ender-pearl
+  actionbar: true
+  bossbar: true
+
+crossbow:
+  enabled: false
+  cooldown-seconds: 5
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.crossbow
+  actionbar: true
+  bossbar: true
+
+bow:
+  enabled: false
+  cooldown-seconds: 2
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.bow
+  actionbar: true
+  bossbar: true
+
+shield:
+  enabled: false
+  cooldown-seconds: 5
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.shield
+  actionbar: true
+  bossbar: true
+
+totem:
+  enabled: false
+  cooldown-seconds: 30
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.totem
+  actionbar: true
+  bossbar: true
+
+wind-charge:
+  enabled: false
+  cooldown-seconds: 3
+  cancel-action: true
+  overlay: true
+  bypass-permission: itemcooldowns.bypass.wind-charge
+  actionbar: true
+  bossbar: true

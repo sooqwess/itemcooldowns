@@ -1,0 +1,12 @@
+PASS first use starts
+PASS repeated use blocks
+PASS players are isolated
+PASS materials are isolated
+PASS active count
+PASS per-material reset
+PASS reset does not affect other players
+PASS player reset
+PASS 64 concurrent attempts produce exactly one start
+PASS expiry
+PASS global reset
+All 11 tracker checks passed.

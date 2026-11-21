@@ -1,0 +1,54 @@
+# ==========================================================
+#  ItemCooldowns v2.0 — Deutsch
+#  Placeholders: {item}, {seconds}, {progress}, {player}
+#  Colors: & codes and &#RRGGBB hex colors.
+# ==========================================================
+
+prefix: '&#8B5CF6&lICD &8» &r'
+
+items:
+  mace: '&#F5C542Streitkolben'
+  spear: '&#F5C542Speer'
+  trident: '&#4FC3F7Dreizack'
+  end-crystal: '&#C77DFFEndkristall'
+  respawn-anchor: '&#C77DFFWiederbelebungsanker'
+  ender-pearl: '&#4FC3F7Enderperle'
+  crossbow: '&#F5C542Armbrust'
+  bow: '&#F5C542Bogen'
+  shield: '&#4FC3F7Schild'
+  totem: '&#F5C542Totem'
+  wind-charge: '&#4FC3F7Windladung'
+
+cooldown:
+  blocked: '&c{item} &7ist im Cooldown &8(&f{seconds}s&8)'
+  started: '&7Cooldown für {item} gestartet &8(&f{seconds}s&8)'
+  ready: '{item} &aist wieder bereit'
+
+commands:
+  help: "&7Befehle:\n&8» &f/icd gui &7— Cooldown-Menü\n&8» &f/icd check [Item] &7— Restzeit prüfen\n&8» &f/icd reset <Spieler> &7— Cooldowns löschen\n&8» &f/icd reload &7— Konfiguration und Sprachen neu laden"
+  reloaded: '&aKonfiguration und Sprachen neu geladen.'
+  no-permission: '&cDazu hast du keine Berechtigung.'
+  unknown: '&cUnbekannter Unterbefehl. &7Nutze &f/icd help&7.'
+  players-only: '&cDieser Befehl ist nur für Spieler.'
+  check-ready: '&aAlle Cooldowns sind bereit.'
+  check-nearest: '&7Nächster Cooldown: &f{seconds}s'
+  unknown-item: '&cUnbekanntes Item: &f{item}'
+  usage-reset: '&7Nutzung: &f/icd reset <Spieler>'
+  player-not-found: '&cSpieler nicht gefunden: &f{player}'
+  reset: '&aAlle Cooldowns von &f{player}&a gelöscht.'
+
+gui:
+  title: '&#8B5CF6Cooldowns &8» &7Menü'
+  ready: '&a✔ Bereit'
+  remaining: '&c⏳ noch {seconds}s'
+  progress: '&7{progress}'
+  total: '&8Basis-Cooldown: &7{seconds}s'
+  empty: '&7Keine aktiven Cooldowns'
+  disabled: '&cDas Cooldown-Menü ist auf diesem Server deaktiviert.'
+
+visual:
+  actionbar: '{item} &8▪ &f{seconds}s &8{progress}'
+  actionbar-ready: '&aAlle Cooldowns bereit'
+  bossbar: '{item} &8— &f{seconds}s'
+  bossbar-ready: '&aAlle Cooldowns bereit'
+  scoreboard-title: '&#8B5CF6Cooldowns'

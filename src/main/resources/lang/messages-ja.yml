@@ -1,0 +1,54 @@
+# ==========================================================
+#  ItemCooldowns v2.0 — 日本語
+#  Placeholders: {item}, {seconds}, {progress}, {player}
+#  Colors: & codes and &#RRGGBB hex colors.
+# ==========================================================
+
+prefix: '&#8B5CF6&lICD &8» &r'
+
+items:
+  mace: '&#F5C542メイス'
+  spear: '&#F5C542スピア'
+  trident: '&#4FC3F7トライデント'
+  end-crystal: '&#C77DFFエンドクリスタル'
+  respawn-anchor: '&#C77DFFリスポーンアンカー'
+  ender-pearl: '&#4FC3F7エンダーパール'
+  crossbow: '&#F5C542クロスボウ'
+  bow: '&#F5C542弓'
+  shield: '&#4FC3F7盾'
+  totem: '&#F5C542トーテム'
+  wind-charge: '&#4FC3F7ウィンドチャージ'
+
+cooldown:
+  blocked: '&c{item} &7はクールダウン中 &8(&f{seconds}秒&8)'
+  started: '&7{item} のクールダウン開始 &8(&f{seconds}秒&8)'
+  ready: '{item} &aは再び使用可能'
+
+commands:
+  help: "&7コマンド:\n&8» &f/icd gui &7— クールダウンメニュー\n&8» &f/icd check [アイテム] &7— 残り時間を確認\n&8» &f/icd reset <プレイヤー> &7— クールダウンを削除\n&8» &f/icd reload &7— 設定と言語を再読み込み"
+  reloaded: '&a設定と言語を再読み込みしました。'
+  no-permission: '&cこの操作の権限がありません。'
+  unknown: '&c不明なサブコマンドです。 &7&f/icd help&7 を使用してください。'
+  players-only: '&cこのコマンドはプレイヤーのみ実行できます。'
+  check-ready: '&aすべてのクールダウンが準備完了です。'
+  check-nearest: '&7最も近いクールダウン: &f{seconds}秒'
+  unknown-item: '&c不明なアイテム: &f{item}'
+  usage-reset: '&7使用方法: &f/icd reset <プレイヤー>'
+  player-not-found: '&cプレイヤーが見つかりません: &f{player}'
+  reset: '&a&f{player}&a のクールダウンをすべて削除しました。'
+
+gui:
+  title: '&#8B5CF6クールダウン &8» &7メニュー'
+  ready: '&a✔ 準備完了'
+  remaining: '&c⏳ 残り {seconds}秒'
+  progress: '&7{progress}'
+  total: '&8基本クールダウン: &7{seconds}秒'
+  empty: '&7クールダウン中のアイテムはありません'
+  disabled: '&cこのサーバーではクールダウンメニューが無効です。'
+
+visual:
+  actionbar: '{item} &8▪ &f{seconds}秒 &8{progress}'
+  actionbar-ready: '&aすべてのクールダウン準備完了'
+  bossbar: '{item} &8— &f{seconds}秒'
+  bossbar-ready: '&aすべてのクールダウン準備完了'
+  scoreboard-title: '&#8B5CF6クールダウン'

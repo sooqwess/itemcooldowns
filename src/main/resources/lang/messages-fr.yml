@@ -1,0 +1,54 @@
+# ==========================================================
+#  ItemCooldowns v2.0 — Français
+#  Placeholders: {item}, {seconds}, {progress}, {player}
+#  Colors: & codes and &#RRGGBB hex colors.
+# ==========================================================
+
+prefix: '&#8B5CF6&lICD &8» &r'
+
+items:
+  mace: '&#F5C542Masse'
+  spear: '&#F5C542Lance'
+  trident: '&#4FC3F7Trident'
+  end-crystal: '&#C77DFFCristal de l''End'
+  respawn-anchor: '&#C77DFFAncre de réapparition'
+  ender-pearl: '&#4FC3F7Perle de l''Ender'
+  crossbow: '&#F5C542Arbalète'
+  bow: '&#F5C542Arc'
+  shield: '&#4FC3F7Bouclier'
+  totem: '&#F5C542Totem'
+  wind-charge: '&#4FC3F7Charge de vent'
+
+cooldown:
+  blocked: '&c{item} &7est en recharge &8(&f{seconds}s&8)'
+  started: '&7Recharge lancée pour {item} &8(&f{seconds}s&8)'
+  ready: '{item} &aest de nouveau prêt'
+
+commands:
+  help: "&7Commandes :\n&8» &f/icd gui &7— menu des recharges\n&8» &f/icd check [objet] &7— voir le temps restant\n&8» &f/icd reset <joueur> &7— effacer les recharges\n&8» &f/icd reload &7— recharger la config et les langues"
+  reloaded: '&aConfiguration et langues rechargées.'
+  no-permission: '&cVous n''avez pas la permission.'
+  unknown: '&cSous-commande inconnue. &7Utilisez &f/icd help&7.'
+  players-only: '&cCette commande est réservée aux joueurs.'
+  check-ready: '&aToutes les recharges sont prêtes.'
+  check-nearest: '&7Recharge la plus proche : &f{seconds}s'
+  unknown-item: '&cObjet inconnu : &f{item}'
+  usage-reset: '&7Utilisation : &f/icd reset <joueur>'
+  player-not-found: '&cJoueur introuvable : &f{player}'
+  reset: '&aRecharges de &f{player}&a effacées.'
+
+gui:
+  title: '&#8B5CF6Recharges &8» &7Menu'
+  ready: '&a✔ Prêt'
+  remaining: '&c⏳ {seconds}s restantes'
+  progress: '&7{progress}'
+  total: '&8Recharge de base : &7{seconds}s'
+  empty: '&7Aucune recharge active'
+  disabled: '&cLe menu des recharges est désactivé sur ce serveur.'
+
+visual:
+  actionbar: '{item} &8▪ &f{seconds}s &8{progress}'
+  actionbar-ready: '&aToutes les recharges sont prêtes'
+  bossbar: '{item} &8— &f{seconds}s'
+  bossbar-ready: '&aToutes les recharges sont prêtes'
+  scoreboard-title: '&#8B5CF6Recharges'
