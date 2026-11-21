@@ -2,6 +2,8 @@
 
 ## 2.0.0
 
+- Merged GitHub v1.01 (`e615d3f`) without rewriting its history; preserved PvPManager, weapon use policies, anchor interactions and crystal entity interactions. Kept atomic tracker checks instead of the old 50 ms bypass window.
+
 - Added live ActionBar, BossBar, scoreboard, sounds and particle feedback.
 - Added a 45-slot cooldown GUI with a purple/black/gold border, localized status and progress.
 - Added English, Russian, German, Spanish, French, Portuguese, Chinese, Japanese, Korean and Ukrainian templates, auto locale selection and explicit locale selection.

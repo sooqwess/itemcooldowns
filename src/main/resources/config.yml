@@ -20,6 +20,10 @@ pvp-only: true
 #   true  -> a Creative player who hits another player is set to Survival
 creative-to-survival-on-player-hit: false
 
+# Respect PvPManager protection before starting a melee cooldown.
+pvpmanager:
+  enabled: true
+
 worlds:
   enabled: false      # enable the world filter
   whitelist: true     # true -> only worlds in the list; false -> all except the list
@@ -79,6 +83,9 @@ spear:               # 1.21.11+ only; auto-disables on older versions
   cooldown-seconds: 5
   cancel-action: true
   overlay: true
+  # block: gate movement/use; damage: allow use but gate damage;
+  # no-damage: allow movement/projectiles without their use damage.
+  use-mode: block
   bypass-permission: itemcooldowns.bypass.spear
   actionbar: true
   bossbar: true
@@ -88,6 +95,7 @@ trident:
   cooldown-seconds: 5
   cancel-action: true
   overlay: true
+  use-mode: block
   bypass-permission: itemcooldowns.bypass.trident
   actionbar: true
   bossbar: true

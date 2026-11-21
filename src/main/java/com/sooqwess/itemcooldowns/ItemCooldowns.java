@@ -7,6 +7,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ItemCooldowns extends JavaPlugin {
 
+    private PvPManagerHook pvpManagerHook;
+    public PvPManagerHook getPvPManagerHook() { return pvpManagerHook; }
+
     private Config config;
     private Lang lang;
     private CooldownTracker tracker;
@@ -20,6 +23,8 @@ public final class ItemCooldowns extends JavaPlugin {
         this.config = new Config(this);
         this.lang = new Lang(this);
         this.tracker = new CooldownTracker();
+        this.pvpManagerHook = new PvPManagerHook();
+        getLogger().info("PvPManager hook active: " + pvpManagerHook.isActive());
         this.visuals = new Visuals(this);
 
         CooldownsCommand command = new CooldownsCommand(this);

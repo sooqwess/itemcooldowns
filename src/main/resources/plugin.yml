@@ -6,7 +6,7 @@ folia-supported: true
 author: Sooqwess
 description: PvP cooldowns for mace, spear, trident, end crystals, respawn anchors, pearls, bows and more. Works on Paper, Spigot, Bukkit, Purpur, Pufferfish, Folia and other Bukkit forks, Minecraft 1.21 - 26.3.
 website: https://modrinth.com/plugin/item_cooldowns/
-softdepend: [LuckPerms, PlaceholderAPI]
+softdepend: [LuckPerms, PlaceholderAPI, PvPManager]
 commands:
   itemcooldowns:
     description: ItemCooldowns main command

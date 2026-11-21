@@ -75,3 +75,7 @@ Menu/HUD/trident screenshots were captured from the v2 build with the new visual
 - Reload clears plugin timers. Prefer a full restart after installation or updates, especially when native overlays are in use.
 
 Before a broad public release, run the missing matrix above, including Folia with multiple regions, multiple simultaneous players, installed PlaceholderAPI, oldest supported Spigot and the intended 26.x Java/runtime combination.
+
+## Pre-publication merge
+
+GitHub main had advanced to `e615d3f` (v1.01). Its PvPManager hook, `use-mode`/legacy `block-use`, Creative option alias, anchor-use and crystal-entity interactions were merged into v2 before publication. The old 50 ms same-attack cooldown bypass was deliberately not restored; atomic check/start stays in place. Fresh v2 weapon defaults are `block`; explicit existing policies are retained. The merged build was recompiled and all 11 standalone tracker assertions rerun. Optional policy/PvPManager gameplay was not integration-tested, so this is a beta, not a broad compatibility certification.

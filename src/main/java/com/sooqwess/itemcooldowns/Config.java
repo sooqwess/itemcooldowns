@@ -19,6 +19,7 @@ import java.util.Set;
  */
 public final class Config {
 
+    private final boolean pvpManagerEnabled;
     private final String locale;
     private final boolean pvpOnly;
     private final boolean creativeToSurvivalOnPlayerHit;
@@ -50,9 +51,10 @@ public final class Config {
 
     public Config(JavaPlugin plugin) {
         FileConfiguration c = plugin.getConfig();
+        this.pvpManagerEnabled = c.getBoolean("pvpmanager.enabled", true);
         this.locale = c.getString("locale", "auto").toLowerCase(Locale.ROOT);
         this.pvpOnly = c.getBoolean("pvp-only", true);
-        this.creativeToSurvivalOnPlayerHit = c.getBoolean("creative-to-survival-on-player-hit", false);
+        this.creativeToSurvivalOnPlayerHit = c.getBoolean("creative-to-survival-on-player-hit", false) || c.getBoolean("gamemode.switch-creative-to-survival", false);
         this.worldsEnabled = c.getBoolean("worlds.enabled", false);
         this.worldsWhitelist = c.getBoolean("worlds.whitelist", true);
         this.worlds = c.getStringList("worlds.list");
@@ -125,6 +127,8 @@ public final class Config {
     public String getLocale() {
         return locale;
     }
+
+    public boolean isPvPManagerEnabled() { return pvpManagerEnabled; }
 
     public boolean isPvpOnly() {
         return pvpOnly;
@@ -203,6 +207,19 @@ public final class Config {
     }
 
     public static final class ItemRule {
+        public enum UseMode {
+            BLOCK, DAMAGE, NO_DAMAGE;
+            public static UseMode parse(String value) {
+                return switch (value == null ? "" : value.toLowerCase(Locale.ROOT)) {
+                    case "damage" -> DAMAGE;
+                    case "no-damage", "allow", "nodamage" -> NO_DAMAGE;
+                    default -> BLOCK;
+                };
+            }
+        }
+        private final UseMode useMode;
+        public UseMode getUseMode() { return useMode; }
+
 
         private final String key;
         private final Kind kind;
@@ -221,6 +238,10 @@ public final class Config {
             this.enabled = c.getBoolean(key + ".enabled", true);
             this.seconds = Math.max(0, c.getInt(key + ".cooldown-seconds", defaultSeconds));
             this.cancel = c.getBoolean(key + ".cancel-action", true);
+            this.useMode = c.contains(key + ".use-mode")
+                    ? UseMode.parse(c.getString(key + ".use-mode"))
+                    : (c.contains(key + ".block-use") && !c.getBoolean(key + ".block-use")
+                    ? UseMode.DAMAGE : UseMode.BLOCK);
             this.overlay = c.getBoolean(key + ".overlay", true);
             this.bypassPermission = c.getString(key + ".bypass-permission", defaultPermission);
             this.actionbar = c.getBoolean(key + ".actionbar", true);

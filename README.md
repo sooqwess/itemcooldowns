@@ -22,6 +22,7 @@ PvP item cooldowns with a purple-and-gold menu, live timers and per-player prote
 - **Per-player, per-material storage:** atomic check/start prevents concurrent attempts from bypassing a running timer.
 - **Spam-limited blocked feedback:** at most one message/sound/particle burst per player per second; every disallowed attempt is still cancelled.
 - **Tridents start on launch**, not on right-click or during charging. Bows/crossbows use the actual shot event.
+- **PvPManager integration** and the existing `use-mode` / legacy `block-use` configuration are preserved from v1.01.
 - Optional **Creative → Survival** conversion when a Creative player hits another player; off by default.
 
 ## Compatibility: target vs. verification
@@ -110,6 +111,16 @@ trident:
 **Vanilla overlay vs. blocked feedback:** the white slot overlay may make the client suppress repeated use packets. The server cannot display a new blocked message for a packet it never receives. For server-driven blocked feedback on items such as crystals, set that rule's `overlay: false`; ActionBar/BossBar/sidebar still show the timer. Gallery capture uses this setting for crystals.
 
 `worlds.enabled`, `worlds.whitelist` and `worlds.list` provide world filtering. Set the Creative → Survival option to true only if that gameplay change is intended.
+
+## Weapon use policy (merged from v1.01)
+
+Spear and trident rules accept `use-mode: block`, `damage`, or `no-damage` (legacy `block-use: false` maps to `damage`). Fresh v2 defaults use `block` so the launch-based trident cooldown remains enabled. Existing explicit `use-mode` values are kept.
+
+- `block`: disallow a use while its cooldown is active.
+- `damage`: allow movement/throws while damage is gated. A trident timer still starts at launch; projectiles launched during cooldown are marked harmless, while the first valid throw can damage normally.
+- `no-damage`: allow the use but suppress its damage. Melee remains independently cooldown-gated.
+
+Spear/Riptide movement-damage suppression uses a 1.5-second attribution window, as a compatibility heuristic. It can also suppress melee within that window. These optional policies and installed PvPManager have **not** had an in-game integration test in this delivery.
 
 ## Languages / customization
 

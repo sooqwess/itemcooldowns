@@ -24,6 +24,10 @@ import java.lang.reflect.Method;
 public final class CooldownListener implements Listener {
 
     private final ItemCooldowns plugin;
+    private final java.util.Map<java.util.UUID, Long> harmlessLungeUntil = new java.util.concurrent.ConcurrentHashMap<>();
+    private org.bukkit.NamespacedKey harmlessProjectileKey() {
+        return new org.bukkit.NamespacedKey(plugin, "harmless-use");
+    }
     private final java.util.Map<java.util.UUID, Long> lastBlockedFeedback = new java.util.concurrent.ConcurrentHashMap<>();
     private final Method useItemInHand;
     private final Method setUseItemInHand;
@@ -46,6 +50,16 @@ public final class CooldownListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Trident trident && trident.getShooter() instanceof Player shooter) {
+            Config config = plugin.getConfigManager();
+            if (!config.isWorldAllowed(shooter.getWorld())) return;
+            if (event.getEntity() instanceof Player victim && config.isPvPManagerEnabled()
+                    && !plugin.getPvPManagerHook().canAttack(shooter, victim)) return;
+            if (trident.getPersistentDataContainer().has(harmlessProjectileKey(), org.bukkit.persistence.PersistentDataType.BYTE)) {
+                event.setCancelled(true);
+            }
+            return;
+        }
         if (!(event.getDamager() instanceof Player player)) {
             return;
         }
@@ -54,6 +68,13 @@ public final class CooldownListener implements Listener {
             return;
         }
         if (config.isPvpOnly() && !(event.getEntity() instanceof Player)) {
+            return;
+        }
+        if (event.getEntity() instanceof Player victim && config.isPvPManagerEnabled()
+                && !plugin.getPvPManagerHook().canAttack(player, victim)) return;
+        Long harmlessUntil = harmlessLungeUntil.get(player.getUniqueId());
+        if (harmlessUntil != null && System.currentTimeMillis() < harmlessUntil) {
+            event.setCancelled(true);
             return;
         }
         if (config.isCreativeToSurvivalOnPlayerHit() && event.getEntity() instanceof Player
@@ -73,6 +94,7 @@ public final class CooldownListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         // Do not retain a player's cooldown or make it survive reconnecting.
         lastBlockedFeedback.remove(event.getPlayer().getUniqueId());
+        harmlessLungeUntil.remove(event.getPlayer().getUniqueId());
         plugin.getTracker().clear(event.getPlayer());
         plugin.getVisuals().forget(event.getPlayer());
     }
@@ -87,7 +109,13 @@ public final class CooldownListener implements Listener {
         }
         Config.ItemRule rule = config.ruleFor(Material.TRIDENT);
         if (rule != null) {
-            handle(player, Material.TRIDENT, rule, event);
+            if (rule.getUseMode() == Config.ItemRule.UseMode.BLOCK) {
+                handle(player, Material.TRIDENT, rule, event);
+            } else if (!player.hasPermission(rule.getBypassPermission())) {
+                long remaining = plugin.getTracker().startIfReady(player, Material.TRIDENT, rule.getSeconds(), false);
+                if (remaining > 0L || rule.getUseMode() == Config.ItemRule.UseMode.NO_DAMAGE)
+                    harmlessLungeUntil.put(player.getUniqueId(), System.currentTimeMillis() + 1500L);
+            }
         }
     }
 
@@ -107,7 +135,20 @@ public final class CooldownListener implements Listener {
         }
         Config.ItemRule rule = config.ruleFor(Material.TRIDENT);
         if (rule != null) {
-            handle(player, Material.TRIDENT, rule, event);
+            if (rule.getUseMode() == Config.ItemRule.UseMode.BLOCK) {
+                handle(player, Material.TRIDENT, rule, event);
+            } else if (!player.hasPermission(rule.getBypassPermission())) {
+                // Launch still starts the timer, but movement/projectiles are allowed.
+                // Tag this projectile rather than checking its shooter's current cooldown on impact:
+                // a valid first throw must not cancel its own damage.
+                long remaining = plugin.getTracker().startIfReady(player, Material.TRIDENT, rule.getSeconds(), false);
+                if (remaining > 0L || rule.getUseMode() == Config.ItemRule.UseMode.NO_DAMAGE)
+                    trident.getPersistentDataContainer().set(harmlessProjectileKey(), org.bukkit.persistence.PersistentDataType.BYTE, (byte) 1);
+                if (remaining == 0L) {
+                    plugin.getLang().sendStarted(player, rule, rule.getSeconds());
+                    plugin.getVisuals().playStarted(player);
+                } else feedbackBlocked(player, rule, remaining);
+            }
         }
     }
 
@@ -150,6 +191,16 @@ public final class CooldownListener implements Listener {
         if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
+        Player actor = event.getPlayer();
+        if (!plugin.getConfigManager().isWorldAllowed(actor.getWorld())) return;
+        if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.RESPAWN_ANCHOR
+                && event.useInteractedBlock() != Event.Result.DENY) {
+            org.bukkit.inventory.ItemStack held = event.getItem();
+            if (held == null || held.getType() == Material.AIR || !held.getType().isBlock()) {
+                Config.ItemRule anchor = plugin.getConfigManager().ruleFor(Material.RESPAWN_ANCHOR);
+                if (anchor != null) { handle(actor, Material.RESPAWN_ANCHOR, anchor, event); return; }
+            }
+        }
         if (event.getItem() == null) {
             return;
         }
@@ -161,6 +212,11 @@ public final class CooldownListener implements Listener {
         // A trident must only start cooldown after ProjectileLaunchEvent. Starting it here
         // cancels the throw itself and lets same-tick attacks bypass the tracker.
         if (material == Material.TRIDENT) {
+            return;
+        }
+        if (rule.getKind() == Kind.ATTACK_AND_USE && rule.getUseMode() != Config.ItemRule.UseMode.BLOCK) {
+            if (rule.getUseMode() == Config.ItemRule.UseMode.NO_DAMAGE && !actor.hasPermission(rule.getBypassPermission()))
+                harmlessLungeUntil.put(actor.getUniqueId(), System.currentTimeMillis() + 1500L);
             return;
         }
         // Bows are handled by PlayerShootBowEvent (actual shot), not by draw.
@@ -202,17 +258,33 @@ public final class CooldownListener implements Listener {
             if (rule.isCancel()) {
                 cancel(player, material, event);
             }
-            long now = System.currentTimeMillis();
-            Long last = lastBlockedFeedback.get(player.getUniqueId());
-            if (last == null || now - last >= 1000L) {
-                lastBlockedFeedback.put(player.getUniqueId(), now);
-                plugin.getLang().sendBlocked(player, rule, remaining);
-                plugin.getVisuals().playBlocked(player);
-            }
+            feedbackBlocked(player, rule, remaining);
             return;
         }
         plugin.getLang().sendStarted(player, rule, rule.getSeconds());
         plugin.getVisuals().playStarted(player);
+    }
+
+    private void feedbackBlocked(Player player, Config.ItemRule rule, long remaining) {
+        long now = System.currentTimeMillis();
+        Long last = lastBlockedFeedback.get(player.getUniqueId());
+        if (last == null || now - last >= 1000L) {
+            lastBlockedFeedback.put(player.getUniqueId(), now);
+            plugin.getLang().sendBlocked(player, rule, remaining);
+            plugin.getVisuals().playBlocked(player);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onCrystalInteract(org.bukkit.event.player.PlayerInteractEntityEvent event) {
+        if (!(event.getRightClicked() instanceof org.bukkit.entity.EnderCrystal)) return;
+        Player player = event.getPlayer();
+        if (!plugin.getConfigManager().isWorldAllowed(player.getWorld())) return;
+        Material held = (event.getHand() == org.bukkit.inventory.EquipmentSlot.OFF_HAND
+                ? player.getInventory().getItemInOffHand() : player.getInventory().getItemInMainHand()).getType();
+        if (held != Material.END_CRYSTAL) return;
+        Config.ItemRule rule = plugin.getConfigManager().ruleFor(held);
+        if (rule != null) handle(player, held, rule, event);
     }
 
     private void cancel(Player player, Material material, Cancellable event) {
