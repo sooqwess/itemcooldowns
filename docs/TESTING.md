@@ -60,7 +60,7 @@ All files in `gallery/originals/` are direct 1280×720 screen captures of the Mi
 - `08-trident-throw.png`: real trident launch plus timer.
 - `09-trident-charge-no-cooldown.png`: trident being charged with no trident timer.
 
-The four top-level presentation PNGs add a dark backdrop, titles and an external purple/gold pixel frame. The full screenshot is pasted at native size without editing its in-game text or HUD. There are no AI-generated screenshots. `index.html` embeds all presentation images and works offline.
+The public gallery and `index.html` now use four original client captures directly: HUD, active menu, blocked use and trident launch. Earlier externally framed presentation cards were removed. Screenshot pixels have not been repainted or generated. The project icon and header banner are separate AI-assisted brand artwork selected by the project owner; they are not gameplay evidence. The gallery works offline.
 
 Menu/HUD/trident screenshots were captured from the v2 build with the new visual design and feedback limiting. A subsequent small source revision added drag cancellation, enabled the sidebar in fresh-install defaults, corrected crossbow shot handling and aggregated multi-material rule status. Final compilation, tracker checks and server startup were rerun; the full gameplay matrix was not rerun after those small changes.
 
